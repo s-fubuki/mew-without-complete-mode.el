@@ -1,8 +1,8 @@
 ;;; mew-without-complete-mode.el --  -*- coding: utf-8-emacs; lexical-binding: t -*-
-;; Copyright (C) 2021 fubuki
+;; Copyright (C) 2021, 2022 fubuki
 
 ;; Author: fubuki@frill.org
-;; Version: @(#)$Revision: 1.1 $$Name:  $
+;; Version: @(#)$Revision: 1.7 $$Name:  $
 ;; Keywords: Mail
 
 ;; This program is free software: you can redistribute it and/or modify
@@ -182,11 +182,14 @@
 ;; (define-key mew-summary-mode-map
 ;;   "\C-c\C-w" 'mew-without-complete-mode)
 
-(define-key-after
-  (lookup-key mew-summary-mode-map [menu-bar Mew Misc])
-  [without-complete]
-  '(menu-item "Without Complete" mew-without-complete-mode
-    :button (:toggle . mew-without-complete-mode)))
+(add-hook 'mew-summary-mode-hook
+          #'(lambda ()
+              (define-key-after
+                (or (lookup-key mew-summary-mode-map [menu-bar Mew Misc])
+                    (lookup-key mew-summary-mode-map [menu-bar mew Misc]))
+                [without-complete]
+                '(menu-item "Without Complete" mew-without-complete-mode
+                            :button (:toggle . mew-without-complete-mode)))))
 
 (define-minor-mode mew-without-complete-mode "Mew Completing eXtention."
   :group 'mail
